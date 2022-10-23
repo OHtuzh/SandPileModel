@@ -1,0 +1,78 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-Release-d0094a50bb2071803777.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.23"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"name" : "Release",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "labwork_3_OHtuzh",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "bmp-file-writer::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-bmp-file-writer-Release-5fc5490eec1cc9766478.json",
+					"name" : "bmp-file-writer",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "labwork_3_OHtuzh::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-labwork_3_OHtuzh-Release-30920ba495ac45dd0d53.json",
+					"name" : "labwork_3_OHtuzh",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "program-arguments::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-program-arguments-Release-bcf56089d929ccd86cd8.json",
+					"name" : "program-arguments",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "C:/dev/Itmo/programming basics/labwork-3-OHtuzh/cmake-build-release",
+		"source" : "C:/dev/Itmo/programming basics/labwork-3-OHtuzh"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 4
+	}
+}

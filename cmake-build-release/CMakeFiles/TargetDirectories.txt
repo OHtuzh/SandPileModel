@@ -1,0 +1,5 @@
+C:/dev/Itmo/programming basics/labwork-3-OHtuzh/cmake-build-release/CMakeFiles/program-arguments.dir
+C:/dev/Itmo/programming basics/labwork-3-OHtuzh/cmake-build-release/CMakeFiles/bmp-file-writer.dir
+C:/dev/Itmo/programming basics/labwork-3-OHtuzh/cmake-build-release/CMakeFiles/labwork_3_OHtuzh.dir
+C:/dev/Itmo/programming basics/labwork-3-OHtuzh/cmake-build-release/CMakeFiles/edit_cache.dir
+C:/dev/Itmo/programming basics/labwork-3-OHtuzh/cmake-build-release/CMakeFiles/rebuild_cache.dir
