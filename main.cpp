@@ -5,48 +5,48 @@
 #include <vector>
 #include <fstream>
 
-const std::string L_ARGUMENT = std::string("-l");
-const std::string LENGTH_ARGUMENT = std::string("--length");
-const std::string W_ARGUMENT = std::string("-w");
-const std::string WIDTH_ARGUMENT = std::string("--width");
-const std::string I_ARGUMENT = std::string("-i");
-const std::string INPUT_ARGUMENT = std::string("--input");
-const std::string O_ARGUMENT = std::string("-o");
-const std::string OUTPUT_ARGUMENT = std::string("--output");
-const std::string M_ARGUMENT = std::string("-m");
-const std::string MAX_ITERATIONS_ARGUMENT = std::string("--max-iter");
-const std::string F_ARGUMENT = std::string("-f");
-const std::string FREQ_ARGUMENT = std::string("--freq");
+const std::string kLArgument("-l");
+const std::string kLengthArgument("--length");
+const std::string kWArgument("-w");
+const std::string kWidthArgument("--width");
+const std::string kIArgument("-i");
+const std::string kInputArgument("--input");
+const std::string kOArgument("-o");
+const std::string kOutputArgument("--output");
+const std::string kMArgument("-m");
+const std::string kMaxIterationsArgument("--max-iter");
+const std::string kFArgument("-f");
+const std::string kFreqArgument("--freq");
 
-const bmp_writer::Pixel WHITE(255, 255, 255, 255);
-const bmp_writer::Pixel GREEN(0, 128, 0, 255);
-const bmp_writer::Pixel PURPLE(140, 0, 255, 255);
-const bmp_writer::Pixel YELLOW(255, 255, 0, 255);
-const bmp_writer::Pixel BLACK(0, 0, 0, 255);
+const bmp_writer::Pixel kWhite(255, 255, 255, 255);
+const bmp_writer::Pixel kGreen(0, 128, 0, 255);
+const bmp_writer::Pixel kPurple(140, 0, 255, 255);
+const bmp_writer::Pixel kYellow(255, 255, 0, 255);
+const bmp_writer::Pixel kBlack(0, 0, 0, 255);
 
-void prepare_arguments(uint16_t& length,
-                       uint16_t& width,
-                       std::string& input_file_path,
-                       std::string& output_directory,
-                       uint64_t& max_iterations,
-                       uint64_t& frequency,
-                       const int argc, const char* argv[]) {
-    program_arguments::Response response = program_arguments::parse_program_arguments(argc, argv);
+void PrepareArguments(uint16_t& length,
+                      uint16_t& width,
+                      std::string& input_file_path,
+                      std::string& output_directory,
+                      uint64_t& max_iterations,
+                      uint64_t& frequency,
+                      int argc, const char* const argv[]) {
+    program_arguments::Response response = program_arguments::ParseProgramArguments(argc, argv);
 
     try {
-        length = std::stoi(response.get_argument(L_ARGUMENT, LENGTH_ARGUMENT));
-        width = std::stoi(response.get_argument(W_ARGUMENT, WIDTH_ARGUMENT));
-        input_file_path = response.get_argument(I_ARGUMENT, INPUT_ARGUMENT);
-        output_directory = response.get_argument(O_ARGUMENT, OUTPUT_ARGUMENT);
-        max_iterations = std::stoull(response.get_argument(M_ARGUMENT, MAX_ITERATIONS_ARGUMENT));
-        frequency = std::stoull(response.get_argument(F_ARGUMENT, FREQ_ARGUMENT));
-    } catch (program_arguments::missed_argument_exception& exception) {
+        length = std::stoi(response.GetArgument(kLArgument, kLengthArgument));
+        width = std::stoi(response.GetArgument(kWArgument, kWidthArgument));
+        input_file_path = response.GetArgument(kIArgument, kInputArgument);
+        output_directory = response.GetArgument(kOArgument, kOutputArgument);
+        max_iterations = std::stoull(response.GetArgument(kMArgument, kMaxIterationsArgument));
+        frequency = std::stoull(response.GetArgument(kFArgument, kFreqArgument));
+    } catch (const program_arguments::MissedArgumentException& exception) {
         std::cerr << exception.what() << std::endl;
         exit(-1);
     }
 }
 
-void get_data_from_file(const std::string& file_path, std::vector<std::vector<uint64_t>>& grains) {
+void GetDataFromFile(const std::string& file_path, std::vector<std::vector<uint64_t>>& grains) {
     std::ifstream input(file_path);
     if (!input) {
         std::cerr << "Invalid file path" << std::endl;
@@ -73,28 +73,28 @@ void get_data_from_file(const std::string& file_path, std::vector<std::vector<ui
     input.close();
 }
 
-void draw_sand_pile_model(const std::vector<std::vector<uint64_t>>& data, const std::string& output_file_path) {
+void DrawSandPileModel(const std::vector<std::vector<uint64_t>>& data, const std::string& output_file_path) {
     std::vector<std::vector<bmp_writer::Pixel>> pixels(data.size(), std::vector<bmp_writer::Pixel>(data[0].size()));
     for (int i = 0; i < data.size(); i++) {
         for (int j = 0; j < data[i].size(); j++) {
             if (data[i][j] == 0) {
-                pixels[i][j] = WHITE;
+                pixels[i][j] = kWhite;
             } else if (data[i][j] == 1) {
-                pixels[i][j] = GREEN;
+                pixels[i][j] = kGreen;
             } else if (data[i][j] == 2) {
-                pixels[i][j] = PURPLE;
+                pixels[i][j] = kPurple;
             } else if (data[i][j] == 3) {
-                pixels[i][j] = YELLOW;
+                pixels[i][j] = kYellow;
             } else {
-                pixels[i][j] = BLACK;
+                pixels[i][j] = kBlack;
             }
         }
     }
 
-    bmp_writer::WriteBmpFile(output_file_path.c_str(), pixels);
+    bmp_writer::WriteBmpFile(output_file_path, pixels);
 }
 
-bool sand_pile_model_iteration(std::vector<std::vector<uint64_t>>& data) { // returns true if sand pile changed
+bool SandPileModelIteration(std::vector<std::vector<uint64_t>>& data) { // returns true if sand pile changed
     bool changed = false;
     bool resized_left = false;
     bool resized_right = false;
@@ -134,25 +134,25 @@ bool sand_pile_model_iteration(std::vector<std::vector<uint64_t>>& data) { // re
     return changed;
 }
 
-void sand_pile_model_algorithm(const uint16_t height,
-                               const uint16_t width,
-                               const uint64_t max_iterations,
-                               const uint64_t frequency,
-                               const std::string& input_file_path,
-                               const std::string& out_directory) {
+void SandPileModelAlgorithm(const uint16_t height,
+                            const uint16_t width,
+                            const uint64_t max_iterations,
+                            const uint64_t frequency,
+                            const std::string& input_file_path,
+                            const std::string& out_directory) {
     std::vector<std::vector<uint64_t>> grains(height, std::vector<uint64_t>(width, 0));
-    get_data_from_file(input_file_path, grains);
+    GetDataFromFile(input_file_path, grains);
 
     bool work = true;
     uint64_t i = 1;
     while (work && (i++ <= max_iterations || max_iterations == 0)) {
-        work = sand_pile_model_iteration(grains);
+        work = SandPileModelIteration(grains);
         if (frequency != 0 && i % frequency == 0) {
-            draw_sand_pile_model(grains, out_directory + '\\' + std::to_string(i / frequency) + ".bmp");
+            DrawSandPileModel(grains, out_directory + '\\' + std::to_string(i / frequency) + ".bmp");
         }
     }
     if (frequency == 0) {
-        draw_sand_pile_model(grains, out_directory + "\\1.bmp");
+        DrawSandPileModel(grains, out_directory + "\\1.bmp");
     }
 }
 
@@ -163,10 +163,9 @@ int main(int argc, const char** argv) {
     std::string output_directory;
     uint64_t max_iterations;
     uint64_t frequency;
-    prepare_arguments(height, width, input_file_path, output_directory, max_iterations, frequency, argc, argv);
+    PrepareArguments(height, width, input_file_path, output_directory, max_iterations, frequency, argc, argv);
 
-    sand_pile_model_algorithm(height, width, max_iterations, frequency, input_file_path, output_directory);
-
+    SandPileModelAlgorithm(height, width, max_iterations, frequency, input_file_path, output_directory);
 
     return 0;
 }

@@ -11,3 +11,16 @@
 791	865	6882454060538523	labwork_3_OHtuzh.exe	68994b60aa8104bd
 3	922	6882454475302292	CMakeFiles/labwork_3_OHtuzh.dir/main.cpp.obj	91c405aaf3562da
 923	1024	6882454476292503	labwork_3_OHtuzh.exe	68994b60aa8104bd
+6	817	6883129051554701	CMakeFiles/bmp-file-writer.dir/my_libraries/BmpFile/bmp_file.cpp.obj	d9f171bd7ab8898d
+3	955	6883129052961036	CMakeFiles/program-arguments.dir/my_libraries/ProgramArguments/program_arguments.cpp.obj	79dd638055dc16b9
+818	958	6883129052961036	libbmp-file-writer.a	1aaff6d175554347
+8	991	6883129053273571	CMakeFiles/labwork_3_OHtuzh.dir/main.cpp.obj	91c405aaf3562da
+955	999	6883129053429840	libprogram-arguments.a	37293a7bc133dde7
+2	288	6883130425666500	CMakeFiles/bmp-file-writer.dir/my_libraries/BmpFile/bmp_file.cpp.obj	d9f171bd7ab8898d
+288	328	6883130426076853	libbmp-file-writer.a	1aaff6d175554347
+2	307	6883131232951671	CMakeFiles/bmp-file-writer.dir/my_libraries/BmpFile/bmp_file.cpp.obj	d9f171bd7ab8898d
+307	349	6883131233374340	libbmp-file-writer.a	1aaff6d175554347
+5	700	6883131236875553	CMakeFiles/labwork_3_OHtuzh.dir/main.cpp.obj	91c405aaf3562da
+3	347	6883131294443169	CMakeFiles/bmp-file-writer.dir/my_libraries/BmpFile/bmp_file.cpp.obj	d9f171bd7ab8898d
+347	395	6883131294934078	libbmp-file-writer.a	1aaff6d175554347
+6	753	6883131298513000	CMakeFiles/labwork_3_OHtuzh.dir/main.cpp.obj	91c405aaf3562da
