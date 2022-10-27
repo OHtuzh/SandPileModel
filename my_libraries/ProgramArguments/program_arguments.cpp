@@ -45,7 +45,8 @@ namespace program_arguments {
         arguments_[argument] = value;
     }
 
-    const std::string& Response::GetArgument(const std::string& short_argument, const std::string& long_argument) const {
+    const std::string& Response::GetArgument(const std::string& short_argument,
+                                             const std::string& long_argument) const {
         try {
             return arguments_.at(short_argument);
         } catch (const std::exception& exception_1) {

@@ -21,7 +21,6 @@ namespace program_arguments {
         std::unordered_set<std::string> flags_;
         std::vector<std::string> some_values_;
 
-
         void SetArgument(const std::string& argument, const std::string& value);
         const std::string& GetArgument(const std::string& short_argument, const std::string& long_argument) const;
      private:
