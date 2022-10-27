@@ -2,8 +2,6 @@
 #include "my_libraries/ProgramArguments/program_arguments.h"
 
 #include <iostream>
-#include <vector>
-#include <fstream>
 
 const char* kLArgument = "-l";
 const char* kLengthArgument = "--length";
