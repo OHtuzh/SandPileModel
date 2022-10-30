@@ -25,6 +25,7 @@ namespace program_arguments {
         const std::string& GetArgument(const std::string& short_argument, const std::string& long_argument) const;
      private:
         std::map<std::string, std::string> arguments_;
+        const std::string& GetLongArgument(const std::string& short_argument, const std::string& long_argument) const;
     };
 
     Response ParseProgramArguments(int argc, const char* const argv[]);

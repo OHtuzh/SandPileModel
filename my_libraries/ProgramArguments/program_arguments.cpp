@@ -5,7 +5,7 @@
 namespace program_arguments {
 
     MissedArgumentException::MissedArgumentException(std::string short_argument, std::string long_argument) {
-        this->message_ = "You missed argument for " + short_argument + " | " + long_argument;
+        message_ = "You missed argument for " + short_argument + " | " + long_argument;
     }
 
     const char* MissedArgumentException::what() const noexcept {
@@ -45,16 +45,21 @@ namespace program_arguments {
         arguments_[argument] = value;
     }
 
+    const std::string& Response::GetLongArgument(const std::string& short_argument,
+                                                 const std::string& long_argument) const {
+        try {
+            return arguments_.at(long_argument);
+        } catch (const std::exception& exception) {
+            throw MissedArgumentException(short_argument, long_argument);
+        }
+    }
+
     const std::string& Response::GetArgument(const std::string& short_argument,
                                              const std::string& long_argument) const {
         try {
             return arguments_.at(short_argument);
         } catch (const std::exception& exception_1) {
-            try {
-                return arguments_.at(long_argument);
-            } catch (const std::exception& exception_2) {
-                throw MissedArgumentException(short_argument, long_argument);
-            }
+            return GetLongArgument(short_argument, long_argument);
         }
     }
 }// namespace program_arguments

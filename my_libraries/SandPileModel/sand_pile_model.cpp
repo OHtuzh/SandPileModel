@@ -94,24 +94,19 @@ bool SandPileModelIteration(std::vector<std::vector<uint64_t>>& data) { // retur
     return changed;
 }
 
-void SandPileModelAlgorithm(const uint16_t height,
-                            const uint16_t width,
-                            const uint64_t max_iterations,
-                            const uint64_t frequency,
-                            const std::string& input_file_path,
-                            const std::string& out_directory) {
-    std::vector<std::vector<uint64_t>> grains(height, std::vector<uint64_t>(width, 0));
-    GetDataFromFile(input_file_path, grains);
+void SandPileModelAlgorithm(const SandPileInputData& input_data) {
+    std::vector<std::vector<uint64_t>> grains(input_data.height, std::vector<uint64_t>(input_data.width, 0));
+    GetDataFromFile(input_data.input_file_path, grains);
 
     bool work = true;
     uint64_t i = 1;
-    while (work && (i++ <= max_iterations || max_iterations == 0)) {
+    while (work && (i++ <= input_data.max_iterations || input_data.max_iterations == 0)) {
         work = SandPileModelIteration(grains);
-        if (frequency != 0 && i % frequency == 0) {
-            DrawSandPileModel(grains, out_directory + '\\' + std::to_string(i / frequency) + ".bmp");
+        if (input_data.frequency != 0 && i % input_data.frequency == 0) {
+            DrawSandPileModel(grains, input_data.output_directory + '\\' + std::to_string(i / input_data.frequency) + ".bmp");
         }
     }
-    if (frequency == 0) {
-        DrawSandPileModel(grains, out_directory + "\\1.bmp");
+    if (input_data.frequency == 0) {
+        DrawSandPileModel(grains, input_data.output_directory + "\\1.bmp");
     }
 }

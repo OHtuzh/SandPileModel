@@ -5,16 +5,21 @@
 #include <vector>
 #include <string>
 
+struct SandPileInputData {
+    uint16_t height;
+    uint16_t width;
+    std::string input_file_path;
+    std::string output_directory;
+    uint64_t max_iterations;
+    uint64_t frequency;
+};
+
+
 void GetDataFromFile(const std::string& file_path, std::vector<std::vector<uint64_t>>& grains);
 
 void DrawSandPileModel(const std::vector<std::vector<uint64_t>>& data, const std::string& output_file_path);
 
 bool SandPileModelIteration(std::vector<std::vector<uint64_t>>& data);
 
-void SandPileModelAlgorithm(const uint16_t height,
-                            const uint16_t width,
-                            const uint64_t max_iterations,
-                            const uint64_t frequency,
-                            const std::string& input_file_path,
-                            const std::string& out_directory);
+void SandPileModelAlgorithm(const SandPileInputData& input_data);
 

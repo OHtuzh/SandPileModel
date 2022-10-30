@@ -4,7 +4,7 @@
 #include <iostream>
 
 const char* kLArgument = "-l";
-const char* kLengthArgument = "--length";
+const char* kLengthArgument = "--height";
 const char* kWArgument = "-w";
 const char* kWidthArgument = "--width";
 const char* kIArgument = "-i";
@@ -16,38 +16,29 @@ const char* kMaxIterationsArgument = "--max-iter";
 const char* kFArgument = "-f";
 const char* kFreqArgument = "--freq";
 
-void PrepareArguments(uint16_t& length,
-                      uint16_t& width,
-                      std::string& input_file_path,
-                      std::string& output_directory,
-                      uint64_t& max_iterations,
-                      uint64_t& frequency,
+void PrepareArguments(SandPileInputData& input_data,
                       int argc, const char* const argv[]) {
-    program_arguments::Response response = program_arguments::ParseProgramArguments(argc, argv);
+    auto response = program_arguments::ParseProgramArguments(argc, argv);
 
-    try {
-        length = std::stoi(response.GetArgument(kLArgument, kLengthArgument));
-        width = std::stoi(response.GetArgument(kWArgument, kWidthArgument));
-        input_file_path = response.GetArgument(kIArgument, kInputArgument);
-        output_directory = response.GetArgument(kOArgument, kOutputArgument);
-        max_iterations = std::stoull(response.GetArgument(kMArgument, kMaxIterationsArgument));
-        frequency = std::stoull(response.GetArgument(kFArgument, kFreqArgument));
-    } catch (const program_arguments::MissedArgumentException& exception) {
-        std::cerr << exception.what() << std::endl;
-        exit(-1);
-    }
+    input_data.height = std::stoi(response.GetArgument(kLArgument, kLengthArgument));
+    input_data.width = std::stoi(response.GetArgument(kWArgument, kWidthArgument));
+    input_data.input_file_path = response.GetArgument(kIArgument, kInputArgument);
+    input_data.output_directory = response.GetArgument(kOArgument, kOutputArgument);
+    input_data.max_iterations = std::stoull(response.GetArgument(kMArgument, kMaxIterationsArgument));
+    input_data.frequency = std::stoull(response.GetArgument(kFArgument, kFreqArgument));
 }
 
 int main(int argc, const char** argv) {
-    uint16_t height;
-    uint16_t width;
-    std::string input_file_path;
-    std::string output_directory;
-    uint64_t max_iterations;
-    uint64_t frequency;
-    PrepareArguments(height, width, input_file_path, output_directory, max_iterations, frequency, argc, argv);
+    SandPileInputData input_data;
 
-    SandPileModelAlgorithm(height, width, max_iterations, frequency, input_file_path, output_directory);
+    try {
+        PrepareArguments(input_data, argc, argv);
+    } catch (const program_arguments::MissedArgumentException& exception) {
+        std::cerr << exception.what() << std::endl;
+        return -1;
+    }
+
+    SandPileModelAlgorithm(input_data);
 
     return 0;
 }

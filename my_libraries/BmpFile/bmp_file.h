@@ -67,7 +67,17 @@ namespace bmp_writer {
         uint8_t color;
     };
 
-    uint8_t* SerializePixels4t(const std::vector<Pixel4_t>& pixels, const std::streamsize& buff_size);
+    inline uint8_t* SerializePixels4t(const std::vector<Pixel4_t>& pixels, const std::streamsize& buff_size);
+
+    inline BitmapFileHeader CreateFileHeader(const std::vector<std::vector<Pixel4_t>>& pixels,
+                                             uint32_t color_table_size);
+
+    inline BitmapInformationHeader CreateInformationHeader(const std::vector<std::vector<Pixel4_t>>& pixels);
+
+    inline void WriteHeaders(std::ostream& out,
+                             const BitmapFileHeader& file_header,
+                             const BitmapInformationHeader& bitmap_information_header,
+                             const ColorTable& color_table);
 
     void WriteBmpFile(const std::string& filepath, const std::vector<std::vector<Pixel4_t>>& pixels);
 }
