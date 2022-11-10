@@ -4,7 +4,6 @@
 #include <iostream>
 #include <fstream>
 
-
 void GetDataFromFile(const std::string& file_path, std::vector<std::vector<uint64_t>>& grains) {
     std::ifstream input(file_path);
     if (!input) {
@@ -82,8 +81,8 @@ bool SandPileModelIteration(std::vector<std::vector<uint64_t>>& data) { // retur
         }
     }
     data = std::vector<std::vector<uint64_t>>(result.size() - !resized_bottom - !resized_top,
-        std::vector<uint64_t>(result[0].size() - !resized_left - !resized_right,
-                              0));
+                                              std::vector<uint64_t>(result[0].size() - !resized_left - !resized_right,
+                                                                    0));
     for (int i = !resized_top; i < result.size() - !resized_bottom; i++) {
         for (int j = !resized_left; j < result[i].size() - !resized_right; j++) {
             data[i - !resized_top][j - !resized_left] = result[i][j];
@@ -103,10 +102,10 @@ void SandPileModelAlgorithm(const SandPileInputData& input_data) {
     while (work && (i++ <= input_data.max_iterations || input_data.max_iterations == 0)) {
         work = SandPileModelIteration(grains);
         if (input_data.frequency != 0 && i % input_data.frequency == 0) {
-            DrawSandPileModel(grains, input_data.output_directory + '\\' + std::to_string(i / input_data.frequency) + ".bmp");
+            DrawSandPileModel(grains, input_data.output_directory + std::to_string(i / input_data.frequency) + ".bmp");
         }
     }
     if (input_data.frequency == 0) {
-        DrawSandPileModel(grains, input_data.output_directory + "\\1.bmp");
+        DrawSandPileModel(grains, input_data.output_directory + "1.bmp");
     }
 }

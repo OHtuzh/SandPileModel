@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <vector>
 #include <string>
+#include <array>
 
 namespace bmp_writer {
 
@@ -15,7 +16,7 @@ namespace bmp_writer {
         uint32_t reserved;
         uint32_t data_offset;
 
-        inline uint8_t* Serialize() const;
+        std::array<uint8_t, BitmapFileHeader::kBitmapFileHeaderSize> Serialize() const;
     };
 
     struct BitmapInformationHeader {
@@ -34,7 +35,7 @@ namespace bmp_writer {
         uint32_t color_used;
         uint32_t important_colors;
 
-        inline uint8_t* Serialize() const;
+        std::array<uint8_t, BitmapInformationHeader::kBitmapInformationHeaderSize> Serialize() const;
     };
 
     struct Pixel32_t {
@@ -51,10 +52,10 @@ namespace bmp_writer {
      private:
         std::vector<Pixel32_t> colors;
      public:
-        ColorTable();
+        ColorTable(const std::vector<Pixel32_t>& colors);
 
-        inline int64_t GetSize() const;
-        inline uint8_t* Serialize() const;
+        uint64_t GetSize() const;
+        uint8_t* Serialize() const;
     };
 
     struct Pixel4_t {
@@ -73,6 +74,8 @@ namespace bmp_writer {
                                              uint32_t color_table_size);
 
     inline BitmapInformationHeader CreateInformationHeader(const std::vector<std::vector<Pixel4_t>>& pixels);
+
+    inline ColorTable CreateColorTable();
 
     inline void WriteHeaders(std::ostream& out,
                              const BitmapFileHeader& file_header,

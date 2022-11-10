@@ -4,8 +4,8 @@
 #include <fstream>
 
 namespace bmp_writer {
-    inline uint8_t* BitmapFileHeader::Serialize() const {
-        return new uint8_t[BitmapFileHeader::kBitmapFileHeaderSize]{
+    std::array<uint8_t, BitmapFileHeader::kBitmapFileHeaderSize> BitmapFileHeader::Serialize() const {
+        return {
             static_cast<uint8_t>(file_signature & 0x00FF),
             static_cast<uint8_t>(file_signature >> 8),
             // File kSize | 32 bits
@@ -26,8 +26,8 @@ namespace bmp_writer {
         };
     }
 
-    uint8_t* BitmapInformationHeader::Serialize() const {
-        return new uint8_t[BitmapInformationHeader::kBitmapInformationHeaderSize]{
+    std::array<uint8_t, BitmapInformationHeader::kBitmapInformationHeaderSize> BitmapInformationHeader::Serialize() const {
+        return {
             // Size of header | 32 bits
             static_cast<uint8_t>(size_of_header & 0xFF),
             static_cast<uint8_t>(size_of_header >> 8 & 0xFF),
@@ -82,7 +82,7 @@ namespace bmp_writer {
         };
     }
 
-    inline void Pixel32_t::SetColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha) {
+    void Pixel32_t::SetColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha) {
         color = alpha;
         color = (color << 8) + red;
         color = (color << 8) + green;
@@ -93,20 +93,14 @@ namespace bmp_writer {
         SetColor(red, green, blue, alpha);
     }
 
-    ColorTable::ColorTable() {
-        colors = {
-            {255, 255, 255, 0},
-            {0, 128, 0, 0},
-            {140, 0, 255, 0},
-            {255, 255, 0, 0},
-            {0, 0, 0, 0}
-        };
+    ColorTable::ColorTable(const std::vector<Pixel32_t>& colors) {
+        this->colors = colors;
     }
 
-    inline uint8_t* ColorTable::Serialize() const {
-        auto* result = new uint8_t[colors.size() * Pixel32_t::kSize];
+    uint8_t* ColorTable::Serialize() const {
+        auto* result = new uint8_t[GetSize()];
         int32_t i = 0;
-        for (auto color : colors) {
+        for (auto color: colors) {
             result[i++] = color.color & 0xFF; // 0xaarrggbb
             result[i++] = color.color >> 8 & 0xFF;
             result[i++] = color.color >> 16 & 0xFF;
@@ -116,8 +110,8 @@ namespace bmp_writer {
         return result;
     }
 
-    inline int64_t ColorTable::GetSize() const {
-        return static_cast<int64_t>(colors.size() * 4);
+    uint64_t ColorTable::GetSize() const {
+        return static_cast<uint64_t>(colors.size()) * Pixel32_t::kSize;
     }
 
     inline uint8_t* SerializePixels4t(const std::vector<Pixel4_t>& pixels, const std::streamsize& buff_size) {
@@ -162,22 +156,33 @@ namespace bmp_writer {
         };
     }
 
+    inline ColorTable CreateColorTable() {
+        return ColorTable({
+            {255, 255, 255, 0},
+            {0, 128, 0, 0},
+            {140, 0, 255, 0},
+            {255, 255, 0, 0},
+            {0, 0, 0, 0}
+        });
+    }
+
     inline void WriteHeaders(std::ostream& out,
                              const BitmapFileHeader& file_header,
                              const BitmapInformationHeader& bitmap_information_header,
                              const ColorTable& color_table) {
-        out.write(reinterpret_cast<char*>(file_header.Serialize()), BitmapFileHeader::kBitmapFileHeaderSize);
-        out.write(reinterpret_cast<char*>(bitmap_information_header.Serialize()),
+        out.write(reinterpret_cast<char*>(file_header.Serialize().data()), BitmapFileHeader::kBitmapFileHeaderSize);
+        out.write(reinterpret_cast<char*>(bitmap_information_header.Serialize().data()),
                   BitmapInformationHeader::kBitmapInformationHeaderSize);
-        out.write(reinterpret_cast<char*>(color_table.Serialize()), color_table.GetSize());
+        auto* serialized_color_table = color_table.Serialize();
+        out.write(reinterpret_cast<char*>(serialized_color_table), color_table.GetSize());
+        delete[] serialized_color_table;
     }
 
     void WriteBmpFile(const std::string& filepath, const std::vector<std::vector<Pixel4_t>>& pixels) {
         std::ofstream output(filepath, std::ios_base::out | std::ios_base::binary);
 
         if (output) {
-            ColorTable color_table;
-
+            ColorTable color_table = CreateColorTable();
             BitmapFileHeader file_header = CreateFileHeader(pixels, color_table.GetSize());
             BitmapInformationHeader information_header = CreateInformationHeader(pixels);
 
